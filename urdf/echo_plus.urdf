@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="echo_plus">
+    <link name="base_link">
+        <inertial>
+            <origin xyz="-0.0037667 4.9269E-05 0.093978" rpy="0 0 0" />
+            <mass value="0.88922" />
+            <inertia ixx="0.0011736" ixy="2.0902E-18" ixz="-0.00014329"
+                    iyy="0.00103"  iyz="-1.2713E-07" izz="0.0020309" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/base_link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.1 0.1 0.1 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/base_link.STL" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="rw_link">
+        <inertial>
+            <origin xyz="6.2151E-08 0.00032083 6.3197E-06" rpy="0 0 0" />
+            <mass value="0.61178" />
+            <inertia ixx="0.00067373" ixy="-1.9551E-09" ixz="-2.7426E-11"
+                    iyy="0.0010485"  iyz="-4.8712E-09" izz="0.00067369" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/rw_link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.5 0.5 0.5 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/rw_link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rw_Joint" type="fixed">
+        <origin xyz="0 -0.13379 0.065" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="rw_link" />
+        <axis xyz="-0.0066292 0.99757 0.069317" />
+    </joint>
+
+    <link name="lw_Link">
+        <inertial>
+            <origin xyz="6.2151E-08 -0.00032083 -6.3197E-06" rpy="0 0 0" />
+            <mass value="0.61178" />
+            <inertia ixx="0.00067373" ixy="1.9551E-09" ixz="2.7426E-11"
+                    iyy="0.0010485"  iyz="-4.8712E-09" izz="0.00067369" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/lw_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.5 0.5 0.5 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/lw_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lw_Joint" type="fixed">
+        <origin xyz="0 0.13379 0.065" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="lw_Link" />
+        <axis xyz="-0.012772 0.9917 0.12797" />
+    </joint>
+
+    <link name="frc_Link">
+        <inertial>
+            <origin xyz="-0.15567 0.5545 0.025141" rpy="0 0 0" />
+            <mass value="8.151E-13" />
+            <inertia ixx="5.9301E-16" ixy="-2.8582E-22" ixz="9.8666E-18"
+                    iyy="6.8512E-16"  iyz="1.1178E-22" izz="8.0561E-16" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/frc_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.5 0.5 0.5 0.8" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/frc_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="frc_Joint" type="fixed">
+        <origin xyz="0.152 -0.10851 0.080146" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="frc_Link" />
+        <axis xyz="0 0 1" />
+    </joint>
+
+    <link name="flc_Link">
+        <inertial>
+            <origin xyz="-0.15567 0.3375 0.025141" rpy="0 0 0" />
+            <mass value="8.151E-13" />
+            <inertia ixx="5.9301E-16" ixy="-2.8585E-22" ixz="9.8666E-18"
+                    iyy="6.8512E-16"  iyz="1.1174E-22" izz="8.0561E-16" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/flc_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.5 0.5 0.5 0.8" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/flc_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="flc_Joint" type="fixed">
+        <origin xyz="0.152 0.10849 0.080146" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="flc_Link" />
+        <axis xyz="0 0 1" />
+    </joint>
+
+    <link name="brc_Link">
+        <inertial>
+            <origin xyz="0.15233 0.558 0.025941" rpy="0 0 0" />
+            <mass value="8.151E-13" />
+            <inertia ixx="5.9301E-16" ixy="-2.8586E-22" ixz="-9.8666E-18"
+                    iyy="6.8512E-16"  iyz="-1.1178E-22" izz="8.0561E-16" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/brc_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.5 0.5 0.5 0.8" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/brc_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="brc_Joint" type="fixed">
+        <origin xyz="-0.156 -0.11201 0.079346" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="brc_Link" />
+        <axis xyz="0 0 1" />
+    </joint>
+
+    <link name="blc_Link">
+        <inertial>
+            <origin xyz="0.15233 0.334 0.025941" rpy="0 0 0" />
+            <mass value="8.151E-13" />
+            <inertia ixx="5.9301E-16" ixy="-2.8587E-22" ixz="-9.8666E-18"
+                    iyy="6.8512E-16"  iyz="-1.1177E-22" izz="8.0561E-16" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/blc_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.5 0.5 0.5 0.8" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/blc_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="blc_Joint" type="fixed">
+        <origin xyz="-0.156 0.11199 0.079346" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="blc_Link" />
+        <axis xyz="0 0 1" />
+    </joint>
+
+    <link name="up_link">
+        <inertial>
+            <origin xyz="0.001084 -8.4212E-06 0.137" rpy="0 0 0" />
+            <mass value="0.72097" />
+            <inertia ixx="0.0063351" ixy="4.5569E-08" ixz="-4.7594E-10"
+                    iyy="0.010136"  iyz="-8.6602E-10" izz="0.01647" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/up_link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.2 0.2 0.2 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/up_link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="up_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="up_link" />
+        <axis xyz="0 0 -1" />
+    </joint>
+
+    <link name="print_Link">
+        <inertial>
+            <origin xyz="-9.0206E-17 -9.6285E-06 0.12826" rpy="0 0 0" />
+            <mass value="0.089008" />
+            <inertia ixx="0.0016125" ixy="-3.5297E-08" ixz="1.6401E-19"
+                    iyy="0.00027424"  iyz="8.5282E-19" izz="0.0018844" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/print_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0 0.5 1 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/print_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="print_Joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="print_Link" />
+        <axis xyz="0 0 -1" />
+    </joint>
+
+    <link name="frontback_Link">
+        <inertial>
+            <origin xyz="0.13633 -4.5645E-05 0.093367" rpy="0 0 0" />
+            <mass value="0.8803" />
+            <inertia ixx="0.018557" ixy="-3.0047E-06" ixz="0.00019549"
+                    iyy="0.002961"  iyz="7.3402E-07" izz="0.020159" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/frontback_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.8 0.8 0.78 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/frontback_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="frontback_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="frontback_Link" />
+        <axis xyz="0 0 -1" />
+    </joint>
+
+    <link name="plus_Link">
+        <inertial>
+            <origin xyz="3.2483E-16 -9.6285E-06 0.12243" rpy="0 0 0" />
+            <mass value="0.065271" />
+            <inertia ixx="1.156E-05" ixy="-1.0764E-09" ixz="-1.0788E-19"
+                    iyy="5.254E-05"  iyz="-2.2235E-20" izz="4.729E-05" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/plus_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.86 0.08 0.23 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/plus_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="plus_Joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="plus_Link" />
+        <axis xyz="0 0 -1" />
+    </joint>
+
+    <link name="logo_link">
+        <inertial>
+            <origin xyz="0.045053 0.089038 0.11566" rpy="0 0 0" />
+            <mass value="0.00018721" />
+            <inertia ixx="2.6969E-09" ixy="1.614E-17" ixz="-4.2645E-11"
+                    iyy="5.9808E-09"  iyz="1.6314E-18" izz="3.284E-09" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/logo_link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.2 0.2 0.2 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/logo_link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="logo_Joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="logo_link" />
+        <axis xyz="0 0 -1" />
+    </joint>
+
+    <link name="parts_Link">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0" />
+            <inertia ixx="0" ixy="0" ixz="0"
+                    iyy="0"  iyz="0" izz="0" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/parts_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.2 0.2 0.2 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://hex_toolkit_echo_plus/urdf/meshes/parts_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="parts_Joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="parts_Link" />
+        <axis xyz="0 0 -1" />
+    </joint>
+
+</robot>

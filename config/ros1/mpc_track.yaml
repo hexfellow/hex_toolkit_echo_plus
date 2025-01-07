@@ -1,0 +1,45 @@
+# rate
+rate_ros: 200.0
+rate_odom: 100.0
+rate_mpc: 20.0
+
+# model
+model_base: "base_link"
+model_odom: "odom"
+model_track_width: 0.26758
+
+# limit
+limit_vel:
+# [v_x, v_y, v_yaw]
+  - "[-0.5, 1.0]"
+  - "[-0.0, 0.0]"
+  - "[-0.5, 0.5]"
+limit_acc:
+# [a_x, a_y, a_yaw]
+  - "[-2.0, 1.0]"
+  - "[-0.0, 0.0]"
+  - "[-1.0, 1.0]"
+
+# obs
+obs_weights: 1.0
+
+# mpc
+mpc_window: 300
+mpc_vel:
+  # [v_l, v_r]
+  - "[-1.5, 1.5]"
+  - "[-1.5, 1.5]"
+mpc_ctrl:
+  # [a_l, a_r]
+  - "[-2.0, 2.0]"
+  - "[-2.0, 2.0]"
+mpc_mid_wt:
+# [pos, yaw, vel, acc]
+  - 5.0
+  - 0.1
+  - 1.0e-12
+  - 1.0e-12
+mpc_end_wt:
+# [pos, yaw]
+  - 5.0
+  - 0.1

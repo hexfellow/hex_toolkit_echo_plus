@@ -1,0 +1,29 @@
+<!--#######################################-->
+<!-- Copyright (c) 2024  Dong Zhaorui.     -->
+<!-- All rights reserved.                  -->
+<!-- Author: Dong Zhaorui 847235539@qq.com -->
+<!-- Date  : 2024-12-23                    -->
+<!--#######################################-->
+
+<launch>
+    # arg
+    <arg name="visual_flag" default="true" />
+    <arg name="sim_flag" default="true" />
+    # use sim time
+    <param name="use_sim_time" value="$(arg sim_flag)" />
+
+    # key ctrl
+    <node name="key_ctrl" pkg="hex_toolkit_general_chasssis" type="key_ctrl.py" output="screen" >
+        # param
+        <rosparam file="$(find hex_toolkit_general_chasssis)/config/ros1/key_ctrl.yaml"/>
+        # publish
+        <remap from="/unsafe_ctrl" to="/cmd_vel" />
+        <remap from="/vel_ctrl" to="/unused" />
+    </node>
+
+    # bringup
+    <include file="$(find hex_toolkit_echo_plus)/launch/ros1/bringup.launch">
+        <arg name="visual_flag" value="$(arg visual_flag)" />
+        <arg name="sim_flag" value="$(arg sim_flag)" />
+    </include>
+</launch>

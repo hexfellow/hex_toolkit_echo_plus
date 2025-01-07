@@ -1,0 +1,50 @@
+<!--#######################################-->
+<!-- Copyright (c) 2024  Dong Zhaorui.     -->
+<!-- All rights reserved.                  -->
+<!-- Author: Dong Zhaorui 847235539@qq.com -->
+<!-- Date  : 2024-12-23                    -->
+<!--#######################################-->
+
+<launch>
+    # arg
+    <arg name="visual_flag" default="true" />
+    <arg name="sim_flag" default="true" />
+    # use sim time
+    <param name="use_sim_time" value="$(arg sim_flag)" />
+    
+    # visual
+    <group if="$(arg visual_flag)">
+        # description
+        <param name="robot_description"
+               command="xacro $(find hex_toolkit_echo_plus)/urdf/echo_plus_ros1.xacro" />
+        # robot state publisher
+        <node name="robot_state_publisher"
+              pkg="robot_state_publisher"
+              type="robot_state_publisher" />
+        # rviz
+        <node name="rviz" pkg="rviz" type="rviz"
+              args="-d $(find hex_toolkit_echo_plus)/config/ros1/display.rviz" />
+    </group>
+
+    # sim
+    <group if="$(arg sim_flag)">
+        # gazebo
+        <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+        # spawn
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+              args="-urdf -model echo_plus -param robot_description -x 0 -y 0 -z 0" />
+    </group>
+    # real
+    <group unless="$(arg sim_flag)">
+        # driver
+        <node name="xnode_vehicle" pkg="xpkg_vehicle" type="xnode_vehicle" output="screen" >
+            # param
+            <param name="can_device" value="hexcan0"/>
+            <param name="calc_odom_from_speed" value="false"/>
+            # subscribe
+            <remap from="/cmd_vel" to="/cmd_vel" />
+            # publish
+            <remap from="/odom" to="/odom" />
+        </node>
+    </group>
+</launch>

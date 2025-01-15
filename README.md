@@ -32,7 +32,7 @@ The **hex_toolkit_echo_plus** package provides a suite of tools for **Echo Plus*
 
 For **Hex Chassis** users, we highly recommend using this package within our **Hex Docker Images** to ensure compatibility and an optimized setup experience.
 
-If you choose to set up manually, please install the following dependencies:
+If you prefer to set up manually, please note that the repository may not function as expected. However, if you still choose to proceed, install the following dependencies:
 
 1. **ROS/ROS2**  
    Follow the official [ROS Installation Guide](http://wiki.ros.org/ROS/Installation) or the [ROS2 Installation Guide](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html).

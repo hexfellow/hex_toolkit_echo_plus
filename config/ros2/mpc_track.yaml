@@ -23,10 +23,10 @@ mpc_track:
       - "[-1.0, 1.0]"
 
     # obs
-    obs_weights: 1.0
+    obs_weights: 0.5
 
     # mpc
-    mpc_window: 300
+    mpc_window: 100
     mpc_vel:
       # [v_l, v_r]
       - "[-1.5, 1.5]"

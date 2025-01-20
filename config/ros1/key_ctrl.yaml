@@ -1,0 +1,18 @@
+# rate
+rate_ros: 100.0
+
+# ratio
+ratio_vx: 1.0
+ratio_vy: 0.0
+ratio_yaw: 0.5
+
+# key
+key_vx:
+  - "s"
+  - "w"
+key_vy:
+  - "d"
+  - "a"
+key_yaw:
+  - "l"
+  - "j"

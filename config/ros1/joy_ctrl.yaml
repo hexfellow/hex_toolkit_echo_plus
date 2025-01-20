@@ -1,0 +1,13 @@
+# rate
+rate_ros: 100.0
+
+# ratio
+ratio_vx: -1.0
+ratio_vy: -0.0
+ratio_yaw: -0.5
+
+# joy
+joy_deadzone: 0.1
+joy_vx: "LY"
+joy_vy: "LX"
+joy_yaw: "RX"

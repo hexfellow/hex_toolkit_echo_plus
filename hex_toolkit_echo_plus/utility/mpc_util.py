@@ -119,7 +119,7 @@ class MpcUtil:
         x_ref = np.zeros(self.__dim_x)
         u_ref = np.zeros(self.__dim_u)
         y_ref = np.concatenate((x_ref, u_ref))
-        y_ref_e = np.zeros(self.__dim_x - 2)
+        y_ref_e = np.zeros(self.__dim_x - self.__dim_u)
         self.__ocp.constraints.x0 = x_ref
         self.__ocp.cost.yref = y_ref
         self.__ocp.cost.yref_e = y_ref_e
@@ -178,7 +178,7 @@ class MpcUtil:
         y_ref_e = copy.deepcopy(y_tar)
         y_ref = np.concatenate((
             y_tar,
-            np.zeros(2),
+            np.zeros(self.__dim_u),
             np.zeros(self.__dim_u),
         ))
 

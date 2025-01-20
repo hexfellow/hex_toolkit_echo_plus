@@ -27,8 +27,8 @@ def generate_launch_description():
     )
 
     # joy ctrl
-    joy_ctrl_param = FindPackageShare('hex_toolkit_general_chasssis').find(
-        'hex_toolkit_general_chasssis') + '/config/ros2/joy_ctrl.yaml'
+    joy_ctrl_param = FindPackageShare('hex_toolkit_echo_plus').find(
+        'hex_toolkit_echo_plus') + '/config/ros2/joy_ctrl.yaml'
     joy_ctrl_node = Node(
         package='hex_toolkit_general_chasssis',
         executable='joy_ctrl',

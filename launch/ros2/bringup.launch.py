@@ -84,17 +84,6 @@ def generate_launch_description():
                     'params_file': gazebo_param,
                 }.items(),
             ),
-            ExecuteProcess(
-                cmd=[
-                    'ros2',
-                    'param',
-                    'set',
-                    '/gazebo',
-                    'use_sim_time',
-                    LaunchConfiguration('sim_flag'),
-                ],
-                output='screen',
-            ),
             Node(
                 package='gazebo_ros',
                 executable='spawn_entity.py',

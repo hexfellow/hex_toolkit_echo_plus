@@ -15,7 +15,7 @@
     # joy ctrl
     <node name="joy_ctrl" pkg="hex_toolkit_general_chasssis" type="joy_ctrl.py" output="screen" >
         # param
-        <rosparam file="$(find hex_toolkit_general_chasssis)/config/ros1/joy_ctrl.yaml"/>
+        <rosparam file="$(find hex_toolkit_echo_plus)/config/ros1/joy_ctrl.yaml"/>
         # publish
         <remap from="/unsafe_ctrl" to="/cmd_vel" />
         <remap from="/vel_ctrl" to="/unused" />

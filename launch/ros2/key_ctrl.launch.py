@@ -27,8 +27,8 @@ def generate_launch_description():
     )
 
     # key ctrl
-    key_ctrl_param = FindPackageShare('hex_toolkit_general_chasssis').find(
-        'hex_toolkit_general_chasssis') + '/config/ros2/key_ctrl.yaml'
+    key_ctrl_param = FindPackageShare('hex_toolkit_echo_plus').find(
+        'hex_toolkit_echo_plus') + '/config/ros2/key_ctrl.yaml'
     key_ctrl_node = Node(
         package='hex_toolkit_general_chasssis',
         executable='key_ctrl',

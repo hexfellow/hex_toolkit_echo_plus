@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 ################################################################
-# Copyright 2024 Dong Zhaorui. All rights reserved.
+# Copyright 2025 Dong Zhaorui. All rights reserved.
 # Author: Dong Zhaorui 847235539@qq.com
-# Date  : 2024-12-23
+# Date  : 2025-07-02
 ################################################################
 
 from launch import LaunchDescription
@@ -32,26 +32,26 @@ def generate_launch_description():
         default_value='true',
     )
 
-    # mpc track
+    # pid track
     urdf_file_path = FindPackageShare('hex_toolkit_echo_plus').find(
         'hex_toolkit_echo_plus') + '/urdf/echo_plus.urdf'
-    mpc_root_path = FindPackageShare('hex_toolkit_echo_plus').find(
+    pid_root_path = FindPackageShare('hex_toolkit_echo_plus').find(
         'hex_toolkit_echo_plus')
-    mpc_track_yaml_path = FindPackageShare('hex_toolkit_echo_plus').find(
-        'hex_toolkit_echo_plus') + '/config/ros2/mpc_track.yaml'
-    mpc_track_node = Node(
+    pid_trace_yaml_path = FindPackageShare('hex_toolkit_echo_plus').find(
+        'hex_toolkit_echo_plus') + '/config/ros2/pid_trace.yaml'
+    pid_trace_node = Node(
         package='hex_toolkit_echo_plus',
-        executable='mpc_track',
-        name='mpc_track',
+        executable='pid_trace',
+        name='pid_trace',
         output="screen",
         emulate_tty=True,
         parameters=[
             {
                 'use_sim_time': LaunchConfiguration('sim_flag'),
                 'model_path': urdf_file_path,
-                'mpc_root': mpc_root_path,
+                'pid_root': pid_root_path,
             },
-            mpc_track_yaml_path,
+            pid_trace_yaml_path,
         ],
         remappings=[
             # subscribe
@@ -105,8 +105,8 @@ def generate_launch_description():
         visual_flag,
         sim_flag,
         test_flag,
-        # mpc track
-        mpc_track_node,
+        # pid track
+        pid_trace_node,
         # test
         test_group,
         # bringup

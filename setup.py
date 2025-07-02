@@ -39,7 +39,7 @@ setup(
     license='TODO: License declaration',
     entry_points={
         'console_scripts': [
-            "mpc_track = hex_toolkit_echo_plus.mpc_track:main",
+            "pid_trace = hex_toolkit_echo_plus.pid_trace:main",
         ],
     },
 )

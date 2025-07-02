@@ -6,16 +6,16 @@
 # Date  : 2024-12-23
 ################################################################
 
-import rospy
 import numpy as np
 
+import rospy
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import TwistStamped
 from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Odometry
 
 from .interface_base import InterfaceBase
-from .hex_struct import HexCartVel, HexCartState
+from hex_utils import HexCartVel, HexCartPose, HexCartState
 
 
 class DataInterface(InterfaceBase):
@@ -32,32 +32,23 @@ class DataInterface(InterfaceBase):
         # rate
         self._rate_param.update({
             "odom": rospy.get_param('~rate_odom', 100.0),
-            "mpc": rospy.get_param('~rate_mpc', 20.0),
         })
         # model
-        self._model_param = {
-            "path": rospy.get_param('~model_path', "unknown"),
-            "base": rospy.get_param('~model_base', "unknown"),
-            "odom": rospy.get_param('~model_odom', "unknown"),
-            "track_width": rospy.get_param('~model_track_width', 1.0),
-        }
         self._model_param.update({
-            "cart2motor":
-            np.array([
-                [1.0, -0.5 * self._model_param["track_width"]],
-                [1.0, 0.5 * self._model_param["track_width"]],
-            ]),
-            "motor2cart":
-            np.array([
-                [0.5, 0.5],
-                [
-                    -1.0 / self._model_param["track_width"],
-                    1.0 / self._model_param["track_width"],
-                ],
-            ]),
+            "path":
+            rospy.get_param('~model_path', "unknown"),
+            "base":
+            rospy.get_param('~model_base', "unknown"),
+            "odom":
+            rospy.get_param('~model_odom', "unknown"),
+        })
+        # obs
+        self._obs_param.update({
+            "weights":
+            np.array(rospy.get_param('~obs_weights', 1.0)),
         })
         # limit
-        self._limit_param = {
+        self._limit_param.update({
             "vel":
             np.array(
                 self._str_to_list(
@@ -66,30 +57,22 @@ class DataInterface(InterfaceBase):
             np.array(
                 self._str_to_list(
                     rospy.get_param('~limit_acc', ["[-1.0, 1.0]"]))),
-        }
-        # obs
-        self._obs_param = {
-            "weights": np.array(rospy.get_param('~obs_weights', 1.0)),
-        }
-        # mpc
-        self._mpc_param = {
-            "root":
-            rospy.get_param('~mpc_root', "unknown"),
-            "window":
-            rospy.get_param('~mpc_window', 10),
-            "vel":
+        })
+        # trace
+        self._trace_param.update({
+            "pid":
             np.array(
-                self._str_to_list(rospy.get_param('~mpc_vel',
-                                                  ["[-1.0, 1.0]"]))),
-            "ctrl":
+                self._str_to_list(
+                    rospy.get_param('~trace_pid', ["[1.0, 1.0, 1.0]"]))),
+            "dt":
+            1.0 / self._rate_param["ros"],
+            "err_limit":
             np.array(
-                self._str_to_list(rospy.get_param('~mpc_ctrl',
-                                                  ["[-1.0, 1.0]"]))),
-            "mid_wt":
-            np.array(rospy.get_param('~mpc_mid_wt', [1.0])),
-            "end_wt":
-            np.array(rospy.get_param('~mpc_end_wt', [1.0])),
-        }
+                self._str_to_list(
+                    rospy.get_param('~trace_err_limit', ["[-1.0, 1.0]"]))),
+            "stanley":
+            rospy.get_param('~trace_stanley', 1.0),
+        })
 
         ### publisher
         self.__unsafe_ctrl_pub = rospy.Publisher(
@@ -145,8 +128,8 @@ class DataInterface(InterfaceBase):
         rospy.logfatal(msg, *args, **kwargs)
 
     def pub_unsafe_ctrl(self, out: HexCartVel):
-        vel = out.get_vel()
-        omega = out.get_omega()
+        vel = out.get_linear()
+        omega = out.get_angular()
 
         msg = Twist()
         msg.linear.x = vel[0]
@@ -159,8 +142,8 @@ class DataInterface(InterfaceBase):
         self.__unsafe_ctrl_pub.publish(msg)
 
     def pub_vel_ctrl(self, out: HexCartVel):
-        vel = out.get_vel()
-        omega = out.get_omega()
+        vel = out.get_linear()
+        omega = out.get_angular()
 
         msg = TwistStamped()
         msg.twist.linear.x = vel[0]
@@ -197,10 +180,8 @@ class DataInterface(InterfaceBase):
             msg.twist.twist.angular.z,
         ])
         odom = HexCartState(
-            pos=pos,
-            quat=quat,
-            vel=vel,
-            omega=omega,
+            pose=HexCartPose(pos=pos, quat=quat),
+            vel=HexCartVel(linear=vel, angular=omega),
         )
         self._chassis_odom_queue.put(odom)
 
@@ -216,8 +197,5 @@ class DataInterface(InterfaceBase):
             msg.pose.orientation.y,
             msg.pose.orientation.z,
         ])
-        pose = HexCartState(
-            pos=pos,
-            quat=quat,
-        )
+        pose = HexCartPose(pos=pos, quat=quat)
         self._target_pose_queue.put(pose)

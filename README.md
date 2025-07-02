@@ -3,7 +3,7 @@
 
 ## **Overview**
 
-The **hex_toolkit_echo_plus** package provides a suite of tools for **Echo Plus**, including URDF models and a simple MPC (Model Predictive Control) demo.
+The **hex_toolkit_echo_plus** package provides a suite of tools for **Echo Plus**, including URDF models and a simple pid (Model Predictive Control) demo.
 
 ### **Maintainer**
 
@@ -97,13 +97,13 @@ Source the appropriate setup file based on your ROS version:
 
 The package provides the following nodes:
 
-- **Mpc Track**: Using MPC to follow target pose.
+- **pid Track**: Using pid to follow target pose.
 
 ---
 
-### **Mpc Track**
+### **pid Track**
 
-The **Mpc Track** node employs Model Predictive Control to track target poses.
+The **pid Track** node employs Model Predictive Control to track target poses.
 
 #### **Published Topics**
 
@@ -125,18 +125,18 @@ The **Mpc Track** node employs Model Predictive Control to track target poses.
 | ------------------- | ---------------- | --------------------------------------------- |
 | `rate_ros`          | `double`         | Execution rate of the ROS node (Hz).          |
 | `rate_odom`         | `double`         | Odometry rate of the chassis driver (Hz).     |
-| `rate_mpc`          | `double`         | Execution rate of the MPC (Hz).               |
+| `rate_pid`          | `double`         | Execution rate of the pid (Hz).               |
 | `model_base`        | `string`         | Frame ID of the chassis base.                 |
 | `model_odom`        | `string`         | Frame ID of the odometry.                     |
 | `model_track_width` | `double`         | Track width of the chassis (m).               |
 | `limit_vel`         | `vector<double>` | Velocity limits of the chassis (m/s).         |
 | `limit_acc`         | `vector<double>` | Acceleration limits of the chassis (m/s²).    |
 | `obs_weights`       | `double`         | State observer weights.                       |
-| `mpc_window`        | `int`            | MPC window size.                              |
-| `mpc_vel`           | `vector<double>` | MPC wheel velocity limits (m/s).              |
-| `mpc_ctrl`          | `vector<double>` | MPC wheel acceleration limits (m/s²).         |
-| `mpc_mid_wt`        | `vector<double>` | Weights for MPC mid-points.                   |
-| `mpc_end_wt`        | `vector<double>` | Weights for MPC end-points.                   |
+| `pid_window`        | `int`            | pid window size.                              |
+| `pid_vel`           | `vector<double>` | pid wheel velocity limits (m/s).              |
+| `pid_ctrl`          | `vector<double>` | pid wheel acceleration limits (m/s²).         |
+| `pid_mid_wt`        | `vector<double>` | Weights for pid mid-points.                   |
+| `pid_end_wt`        | `vector<double>` | Weights for pid end-points.                   |
 
 ---
 
@@ -147,7 +147,7 @@ The package provides the following launch files:
 - **Bringup**: **Echo Plus** driver.
 - **Joy Ctrl**: **Echo Plus** driver with gamepad control.
 - **Key Ctrl**: **Echo Plus** driver with keyboard control.
-- **MPC Track**: **Echo Plus** driver with MPC for trajectory following.
+- **pid Track**: **Echo Plus** driver with pid for trajectory following.
 
 ---
 
@@ -217,22 +217,22 @@ Bringup **Echo Plus** and control the chassis using the keyboard.
 
 ---
 
-### **Mpc Track**
+### **pid Track**
 
 #### **Introduction**
 
-Bringup **Echo Plus** and use MPC to follow a trajectory for testing.
+Bringup **Echo Plus** and use pid to follow a trajectory for testing.
 
 #### **Usage**
 
 - **ROS 1**:
 
   ```bash
-  roslaunch hex_toolkit_echo_plus mpc_track.launch
+  roslaunch hex_toolkit_echo_plus pid_trace.launch
   ```
 
 - **ROS 2**:
 
   ```bash
-  ros2 launch hex_toolkit_echo_plus mpc_track.launch.py
+  ros2 launch hex_toolkit_echo_plus pid_trace.launch.py
   ```

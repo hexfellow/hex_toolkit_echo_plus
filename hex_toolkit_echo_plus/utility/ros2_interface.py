@@ -6,18 +6,18 @@
 # Date  : 2024-09-05
 ################################################################
 
+import numpy as np
+
 import rclpy
 import rclpy.node
 import threading
-import numpy as np
-
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import TwistStamped
 from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Odometry
 
 from .interface_base import InterfaceBase
-from .hex_struct import HexCartVel, HexCartState
+from hex_utils import HexCartVel, HexCartPose, HexCartState
 
 
 class DataInterface(InterfaceBase):
@@ -36,26 +36,19 @@ class DataInterface(InterfaceBase):
         ### pamameter
         # declare parameters
         self.__node.declare_parameter('rate_odom', 100.0)
-        self.__node.declare_parameter('rate_mpc', 20.0)
         self.__node.declare_parameter('model_path', "unknown")
         self.__node.declare_parameter('model_base', "unknown")
         self.__node.declare_parameter('model_odom', "unknown")
-        self.__node.declare_parameter('model_track_width', 1.0)
         self.__node.declare_parameter('limit_vel', ["[-1.0, 1.0]"])
         self.__node.declare_parameter('limit_acc', ["[-1.0, 1.0]"])
-        self.__node.declare_parameter('obs_weights', 1.0)
-        self.__node.declare_parameter('mpc_root', "unknown")
-        self.__node.declare_parameter('mpc_window', 10)
-        self.__node.declare_parameter('mpc_vel', ["[-1.0, 1.0]"])
-        self.__node.declare_parameter('mpc_ctrl', ["[-1.0, 1.0]"])
-        self.__node.declare_parameter('mpc_mid_wt', [1.0])
-        self.__node.declare_parameter('mpc_end_wt', [1.0])
+        self.__node.declare_parameter('obs_weights', 0.5)
+        self.__node.declare_parameter('trace_pid', ["[1.0, 1.0, 1.0]"])
+        self.__node.declare_parameter('trace_err_limit', ["[-1.0, 1.0]"])
+        self.__node.declare_parameter('trace_stanley', 1.0)
         # rate
         self._rate_param.update({
             "odom":
             self.__node.get_parameter('rate_odom').value,
-            "mpc":
-            self.__node.get_parameter('rate_mpc').value,
         })
         # model
         self._model_param.update({
@@ -65,23 +58,6 @@ class DataInterface(InterfaceBase):
             self.__node.get_parameter('model_base').value,
             "odom":
             self.__node.get_parameter('model_odom').value,
-            "track_width":
-            self.__node.get_parameter('model_track_width').value,
-        })
-        self._model_param.update({
-            "cart2motor":
-            np.array([
-                [1.0, -0.5 * self._model_param["track_width"]],
-                [1.0, 0.5 * self._model_param["track_width"]],
-            ]),
-            "motor2cart":
-            np.array([
-                [0.5, 0.5],
-                [
-                    -1.0 / self._model_param["track_width"],
-                    1.0 / self._model_param["track_width"],
-                ],
-            ]),
         })
         # limit
         self._limit_param.update({
@@ -99,23 +75,20 @@ class DataInterface(InterfaceBase):
             "weights":
             np.array(self.__node.get_parameter('obs_weights').value),
         })
-        # mpc
-        self._mpc_param.update({
-            "root":
-            self.__node.get_parameter('mpc_root').value,
-            "window":
-            self.__node.get_parameter('mpc_window').value,
-            "vel":
-            np.array(
-                self._str_to_list(self.__node.get_parameter('mpc_vel').value)),
-            "ctrl":
+        # trace
+        self._trace_param.update({
+            "pid":
             np.array(
                 self._str_to_list(
-                    self.__node.get_parameter('mpc_ctrl').value)),
-            "mid_wt":
-            np.array(self.__node.get_parameter('mpc_mid_wt').value),
-            "end_wt":
-            np.array(self.__node.get_parameter('mpc_end_wt').value),
+                    self.__node.get_parameter('trace_pid').value)),
+            "dt":
+            1.0 / self._rate_param["ros"],
+            "err_limit":
+            np.array(
+                self._str_to_list(
+                    self.__node.get_parameter('trace_err_limit').value)),
+            "stanley":
+            self.__node.get_parameter('trace_stanley').value,
         })
 
         ### publisher
@@ -183,8 +156,8 @@ class DataInterface(InterfaceBase):
         self.__logger.fatal(msg, *args, **kwargs)
 
     def pub_unsafe_ctrl(self, out: HexCartVel):
-        vel = out.get_vel()
-        omega = out.get_omega()
+        vel = out.get_linear()
+        omega = out.get_angular()
 
         msg = Twist()
         msg.linear.x = vel[0]
@@ -197,8 +170,8 @@ class DataInterface(InterfaceBase):
         self.__unsafe_ctrl_pub.publish(msg)
 
     def pub_vel_ctrl(self, out: HexCartVel):
-        vel = out.get_vel()
-        omega = out.get_omega()
+        vel = out.get_linear()
+        omega = out.get_angular()
 
         msg = TwistStamped()
         msg.twist.linear.x = vel[0]
@@ -235,10 +208,8 @@ class DataInterface(InterfaceBase):
             msg.twist.twist.angular.z,
         ])
         odom = HexCartState(
-            pos=pos,
-            quat=quat,
-            vel=vel,
-            omega=omega,
+            pose=HexCartPose(pos=pos, quat=quat),
+            vel=HexCartVel(linear=vel, angular=omega),
         )
         self._chassis_odom_queue.put(odom)
 
@@ -254,8 +225,5 @@ class DataInterface(InterfaceBase):
             msg.pose.orientation.y,
             msg.pose.orientation.z,
         ])
-        pose = HexCartState(
-            pos=pos,
-            quat=quat,
-        )
+        pose = HexCartPose(pos=pos, quat=quat)
         self._target_pose_queue.put(pose)

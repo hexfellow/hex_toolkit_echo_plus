@@ -14,7 +14,6 @@ from launch.substitutions import LaunchConfiguration
 from launch.actions import GroupAction
 from launch.conditions import IfCondition, UnlessCondition
 from launch_ros.actions import Node
-from launch.actions import ExecuteProcess
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
@@ -70,14 +69,6 @@ def generate_launch_description():
         'hex_toolkit_echo_plus') + '/config/ros2/gazebo.yaml'
     sim_group = GroupAction(
         [
-            ExecuteProcess(
-                cmd=['killall', '-q', 'gzserver'],
-                output='screen',
-            ),
-            ExecuteProcess(
-                cmd=['killall', '-q', 'gzclient'],
-                output='screen',
-            ),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([gazebo_launch_path]),
                 launch_arguments={
@@ -87,7 +78,6 @@ def generate_launch_description():
             Node(
                 package='gazebo_ros',
                 executable='spawn_entity.py',
-                output='screen',
                 arguments=[
                     '-topic',
                     'robot_description',

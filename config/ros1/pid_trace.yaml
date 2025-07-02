@@ -1,0 +1,37 @@
+# rate
+rate_ros: 200.0
+rate_odom: 100.0
+
+# model
+model_base: "base_link"
+model_odom: "odom"
+
+# limit
+limit_vel:
+  # [vx_min, vx_max]
+  # [vyaw_min, vyaw_max]
+  - "[-1.0, 1.0]"
+  - "[-1.57, 1.57]"
+limit_acc:
+  # [ax_min, ax_max]
+  # [ayaw_min, ayaw_max]
+  - "[-2.0, 2.0]"
+  - "[-3.14, 3.14]"
+
+# obs
+obs_weights: 0.7
+
+# trace
+trace_pid:
+  # [kp_x, kp_yaw]
+  # [ki_x, ki_yaw]
+  # [kd_x, kd_yaw]
+  - "[20.0, 20.0]"
+  - "[0.0, 0.0]"
+  - "[2.0, 2.0]"
+trace_err_limit:
+  # [x_min, x_max]
+  # [yaw_min, yaw_max]
+  - "[-0.5, 0.5]"
+  - "[-1.0, 1.0]"
+trace_ld: 10.0

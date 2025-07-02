@@ -10,7 +10,7 @@ import json
 import queue
 import typing
 from abc import ABC, abstractmethod
-from .hex_struct import HexCartVel, HexCartPose, HexCartState
+from hex_utils import HexCartVel, HexCartPose, HexCartState
 
 
 class InterfaceBase(ABC):
@@ -21,7 +21,7 @@ class InterfaceBase(ABC):
         self._model_param = {}
         self._limit_param = {}
         self._obs_param = {}
-        self._mpc_param = {}
+        self._trace_param = {}
 
         ### rx msg queues
         self._chassis_odom_queue = queue.Queue()
@@ -72,7 +72,7 @@ class InterfaceBase(ABC):
     ####################
     ### parameters
     ####################
-    def _str_to_list(self, list_str: list) -> list:
+    def _str_to_list(self, list_str) -> list:
         result = []
         for s in list_str:
             l = json.loads(s)
@@ -91,8 +91,8 @@ class InterfaceBase(ABC):
     def get_obs_param(self) -> dict:
         return self._obs_param
 
-    def get_mpc_param(self) -> dict:
-        return self._mpc_param
+    def get_trace_param(self) -> dict:
+        return self._trace_param
 
     ####################
     ### publishers

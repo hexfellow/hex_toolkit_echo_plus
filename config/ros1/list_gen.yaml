@@ -1,0 +1,15 @@
+# rate
+rate_ros: 100.0
+
+# model
+model_base: "base_link"
+model_odom: "odom"
+
+# list
+list_target:
+  - "[1.5, 1.5, -0.78539816]"
+  - "[1.5, -1.5, -2.35619449]"
+  - "[-1.5, -1.5, 2.35619449]"
+  - "[-1.5, 1.5, 0.78539816]"
+list_switch: 5.0
+list_inverse_flag: false

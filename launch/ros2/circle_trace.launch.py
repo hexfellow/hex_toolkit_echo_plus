@@ -64,21 +64,21 @@ def generate_launch_description():
     )
 
     # test
-    cart_gen_path = FindPackageShare('hex_toolkit_general_chasssis').find(
-        'hex_toolkit_general_chasssis') + '/config/ros2/cart_gen.yaml'
+    circle_gen_path = FindPackageShare('hex_toolkit_echo_plus').find(
+        'hex_toolkit_echo_plus') + '/config/ros2/circle_gen.yaml'
     test_group = GroupAction(
         [
             Node(
                 package='hex_toolkit_general_chasssis',
-                executable='cart_gen',
-                name='cart_gen',
+                executable='circle_gen',
+                name='circle_gen',
                 output="screen",
                 emulate_tty=True,
                 parameters=[
                     {
                         'use_sim_time': LaunchConfiguration('sim_flag'),
                     },
-                    cart_gen_path,
+                    circle_gen_path,
                 ],
                 remappings=[
                     # publish

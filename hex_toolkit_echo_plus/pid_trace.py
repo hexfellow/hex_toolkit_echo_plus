@@ -65,7 +65,10 @@ class PidTrace:
         trans_cur2tar = hex_utils.trans_inv(trans_odom2cur) @ trans_odom2tar
         pos_ref, quat_ref = hex_utils.trans2part(trans_cur2tar)
         yaw_err = hex_utils.quat2yaw(quat_ref)
-        yaw_ref = self.__stanley_ctrl(yaw_err, pos_ref, lin_cur[0])
+        if np.linalg.norm(pos_ref) < 0.05:
+            yaw_ref = yaw_err
+        else:
+            yaw_ref = self.__stanley_ctrl(yaw_err, pos_ref, lin_cur[0])
         p_ref = np.array([pos_ref[0], yaw_ref])
 
         return p_ref, v_cur

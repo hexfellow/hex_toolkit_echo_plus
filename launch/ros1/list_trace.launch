@@ -1,0 +1,45 @@
+<!--#######################################-->
+<!-- Copyright (c) 2025  Dong Zhaorui.     -->
+<!-- All rights reserved.                  -->
+<!-- Author: Dong Zhaorui 847235539@qq.com -->
+<!-- Date  : 2025-07-02                    -->
+<!--#######################################-->
+
+<launch>
+    # arg
+    <arg name="test_flag" default="true" />
+    <arg name="visual_flag" default="true" />
+    <arg name="sim_flag" default="true" />
+    # use sim time
+    <param name="use_sim_time" value="$(arg sim_flag)" />
+
+    # pid track
+    <node name="pid_trace" pkg="hex_toolkit_echo_plus" type="pid_trace.py" output="screen" >
+        # param
+        <param name="model_path" value="$(find hex_toolkit_echo_plus)/urdf/echo_plus.urdf" />
+        <rosparam file="$(find hex_toolkit_echo_plus)/config/ros1/pid_trace.yaml"/>
+        # subscribe
+        <remap from="/chassis_odom" to="/odom" />
+        <remap from="/target_pose" to="/target_pose" />
+        # publish
+        <remap from="/unsafe_ctrl" to="/cmd_vel" />
+        <remap from="/vel_ctrl" to="/unused" />
+    </node>
+
+    # test
+    <group if="$(arg test_flag)">
+        # list target generator
+        <node name="list_gen" pkg="hex_toolkit_general_chasssis" type="list_gen.py" output="screen" >
+            # param
+            <rosparam file="$(find hex_toolkit_echo_plus)/config/ros1/list_gen.yaml"/>
+            # publish
+            <remap from="/target_pose" to="/target_pose" />
+        </node>
+    </group>
+
+    # bringup
+    <include file="$(find hex_toolkit_echo_plus)/launch/ros1/bringup.launch">
+        <arg name="visual_flag" value="$(arg visual_flag)" />
+        <arg name="sim_flag" value="$(arg sim_flag)" />
+    </include>
+</launch>

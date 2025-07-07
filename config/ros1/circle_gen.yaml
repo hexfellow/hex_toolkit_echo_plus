@@ -1,0 +1,14 @@
+# rate
+rate_ros: 100.0
+
+# model
+model_base: "base_link"
+model_odom: "odom"
+
+# circle
+circle_center:
+  - 0.0
+  - 0.0
+circle_radius: 2.0
+circle_period: 15.0
+circle_inverse_flag: false

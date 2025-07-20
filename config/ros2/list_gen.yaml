@@ -9,9 +9,11 @@ list_gen:
 
     # list
     list_target:
-      - "[1.5, 1.5, -0.78539816]"
-      - "[1.5, -1.5, -2.35619449]"
-      - "[-1.5, -1.5, 2.35619449]"
-      - "[-1.5, 1.5, 0.78539816]"
-    list_switch: 5.0
-    list_inverse_flag: false
+      - "[1.5, 1.5]"
+      - "[1.5, -1.5]"
+      - "[-1.5, -1.5]"
+      - "[-1.5, 1.5]"
+    list_interpolation: 1000
+    list_switch_dist: 0.1
+    list_inverse_flag: true
+    list_fixed_head: false

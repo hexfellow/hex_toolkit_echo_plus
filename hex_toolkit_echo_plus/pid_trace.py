@@ -16,7 +16,7 @@ sys.path.append(scrpit_path)
 from utility import DataInterface
 from utility import ObsUtil
 from utility import PdCtrl
-from utility import StanleyCtrl
+from utility import DistYawCtrl
 
 import hex_utils
 from hex_utils import HexCartVel, HexCartPose, HexCartState
@@ -42,7 +42,7 @@ class PidTrace:
             obs_param=self.__obs_param,
         )
         self.__pd_ctrl = PdCtrl(trace_param=self.__trace_param)
-        self.__stanley_ctrl = StanleyCtrl(trace_param=self.__trace_param)
+        self.__dist_yaw_ctrl = DistYawCtrl(trace_param=self.__trace_param)
 
         ### variables
         # current target
@@ -63,12 +63,13 @@ class PidTrace:
 
         # ref
         trans_cur2tar = hex_utils.trans_inv(trans_odom2cur) @ trans_odom2tar
-        pos_ref, quat_ref = hex_utils.trans2part(trans_cur2tar)
+        pos_err, quat_ref = hex_utils.trans2part(trans_cur2tar)
         yaw_err = hex_utils.quat2yaw(quat_ref)
-        if np.linalg.norm(pos_ref) < 0.05:
+        if np.linalg.norm(pos_err) < 0.05:
             yaw_ref = yaw_err
+            pos_ref = np.zeros(2)
         else:
-            yaw_ref = self.__stanley_ctrl(yaw_err, pos_ref, lin_cur[0])
+            yaw_ref, pos_ref = self.__dist_yaw_ctrl(yaw_err, pos_err, lin_cur[0])
         p_ref = np.array([pos_ref[0], yaw_ref])
 
         return p_ref, v_cur

@@ -27,27 +27,10 @@ class ObsUtil:
         self.__obs_param = copy.deepcopy(obs_param)
 
         ### variables
-        zero_vec = np.zeros(2)
-        self.__vel_limit = np.stack((
-            limit_param["vel"][0, :],
-            zero_vec,
-            zero_vec,
-        ))
-        self.__omega_limit = np.stack((
-            zero_vec,
-            zero_vec,
-            limit_param["vel"][1, :],
-        ))
-        self.__acc_limit = np.stack((
-            limit_param["acc"][0, :],
-            zero_vec,
-            zero_vec,
-        ))
-        self.__alpha_limit = np.stack((
-            zero_vec,
-            zero_vec,
-            limit_param["acc"][1, :],
-        ))
+        self.__vel_limit = limit_param["vel"][0]
+        self.__omega_limit = limit_param["vel"][1]
+        self.__acc_limit = limit_param["acc"][0]
+        self.__alpha_limit = limit_param["acc"][1]
         self.__dt = 1.0 / rate_param["ros"]
         self.__ready = False
         self.__obs_state = HexCartState()
@@ -85,6 +68,12 @@ class ObsUtil:
     def get_state(self) -> HexCartState:
         return self.__obs_state
 
+    def __norm_limit(self, vec: np.ndarray, limit: np.ndarray) -> np.ndarray:
+        vec_norm = np.linalg.norm(vec)
+        vec_dir = vec / (vec_norm + 1e-6)
+        vec_norm = np.clip(vec_norm, -limit, limit)
+        return vec_dir * vec_norm
+
     def predict(
         self,
         acc: np.ndarray,
@@ -97,27 +86,23 @@ class ObsUtil:
         cur_lin_in_body = self.__obs_state.vel().linear()
         cur_ang_in_body = self.__obs_state.vel().angular()
 
-        # vel
-        limited_acc = np.clip(
-            acc,
-            self.__acc_limit[:, 0],
-            self.__acc_limit[:, 1],
-        )
-        limited_alpha = np.clip(
-            alpha,
-            self.__alpha_limit[:, 0],
-            self.__alpha_limit[:, 1],
-        )
-        tar_lin_in_body = np.clip(
+        # limit ddt
+        limited_acc = self.__norm_limit(acc, self.__acc_limit)
+        limited_acc[1:] = 0.0
+        limited_alpha = self.__norm_limit(alpha, self.__alpha_limit)
+        limited_alpha[:2] = 0.0
+
+        # limit dt
+        tar_lin_in_body = self.__norm_limit(
             cur_lin_in_body + limited_acc * self.__dt,
-            self.__vel_limit[:, 0],
-            self.__vel_limit[:, 1],
+            self.__vel_limit,
         )
-        tar_ang_in_body = np.clip(
+        tar_lin_in_body[1:] = 0.0
+        tar_ang_in_body = self.__norm_limit(
             cur_ang_in_body + limited_alpha * self.__dt,
-            self.__omega_limit[:, 0],
-            self.__omega_limit[:, 1],
+            self.__omega_limit,
         )
+        tar_ang_in_body[:2] = 0.0
 
         # pose
         rot_body_in_odom = trans_body_in_odom[:3, :3]

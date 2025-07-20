@@ -18,11 +18,11 @@ else:
 
 from .obs_util import ObsUtil
 from .ctrl_util import PdCtrl
-from .ctrl_util import StanleyCtrl
+from .ctrl_util import DistYawCtrl
 
 __all__ = [
     "DataInterface",
     "ObsUtil",
     "PdCtrl",
-    "StanleyCtrl",
+    "DistYawCtrl",
 ]

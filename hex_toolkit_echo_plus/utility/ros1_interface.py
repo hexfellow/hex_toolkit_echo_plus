@@ -50,26 +50,20 @@ class DataInterface(InterfaceBase):
         # limit
         self._limit_param.update({
             "vel":
-            np.array(
-                self._str_to_list(
-                    rospy.get_param('~limit_vel', ["[-1.0, 1.0]"]))),
+            np.array(rospy.get_param('~limit_vel', [0.0])),
             "acc":
-            np.array(
-                self._str_to_list(
-                    rospy.get_param('~limit_acc', ["[-1.0, 1.0]"]))),
+            np.array(rospy.get_param('~limit_acc', [0.0])),
         })
         # trace
         self._trace_param.update({
             "pid":
             np.array(
-                self._str_to_list(
-                    rospy.get_param('~trace_pid', ["[1.0, 1.0, 1.0]"]))),
+                self._str_to_list(rospy.get_param('~trace_pid',
+                                                  ["[1.0, 1.0]"]))),
             "dt":
             1.0 / self._rate_param["ros"],
             "err_limit":
-            np.array(
-                self._str_to_list(
-                    rospy.get_param('~trace_err_limit', ["[-1.0, 1.0]"]))),
+            np.array(rospy.get_param('~trace_err_limit', [0.0])),
             "stanley":
             rospy.get_param('~trace_stanley', 1.0),
         })

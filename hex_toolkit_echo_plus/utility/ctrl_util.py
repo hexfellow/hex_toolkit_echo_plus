@@ -61,6 +61,8 @@ class DistYawCtrl:
         self,
         trace_param: dict,
     ):
+        self.__pi_6 = np.pi / 6
+
         self.__switch_dist = trace_param["switch_dist"]
 
     def __dist_yaw(self, pos_err):
@@ -73,5 +75,9 @@ class DistYawCtrl:
             yaw_ref = self.__dist_yaw(pos_ref)
         else:
             yaw_ref = yaw_err
+
+        yaw_norm = np.fabs(yaw_ref)
+        if yaw_norm > self.__pi_6:
             pos_ref = np.zeros(2)
+
         return yaw_ref, pos_ref

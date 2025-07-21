@@ -31,4 +31,4 @@ trace_err_limit:
   # [pos_err, yaw_err]
   - 0.5
   - 1.0
-trace_stanley: 0.0
+trace_switch_dist: 0.1

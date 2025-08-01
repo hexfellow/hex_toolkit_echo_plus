@@ -21,9 +21,13 @@ def generate_launch_description():
         'visual_flag',
         default_value='true',
     )
-    sim_flag = DeclareLaunchArgument(
-        'sim_flag',
-        default_value='true',
+    sim_time_flag = DeclareLaunchArgument(
+        'sim_time_flag',
+        default_value='false',
+    )
+    hardware_flag = DeclareLaunchArgument(
+        'hardware_flag',
+        default_value='false',
     )
 
     # joy ctrl
@@ -37,7 +41,7 @@ def generate_launch_description():
         emulate_tty=True,
         parameters=[
             {
-                'use_sim_time': LaunchConfiguration('sim_flag'),
+                'use_sim_time': LaunchConfiguration('sim_time_flag'),
             },
             joy_ctrl_param,
         ],
@@ -55,14 +59,16 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([bringup_launch_path]),
         launch_arguments={
             'visual_flag': LaunchConfiguration('visual_flag'),
-            'sim_flag': LaunchConfiguration('sim_flag'),
+            'sim_time_flag': LaunchConfiguration('sim_time_flag'),
+            'hardware_flag': LaunchConfiguration('hardware_flag'),
         }.items(),
     )
 
     return LaunchDescription([
         # arg
         visual_flag,
-        sim_flag,
+        sim_time_flag,
+        hardware_flag,
         # joy ctrl
         joy_ctrl_node,
         # bringup

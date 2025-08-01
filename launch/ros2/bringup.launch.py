@@ -24,9 +24,13 @@ def generate_launch_description():
         'visual_flag',
         default_value='true',
     )
-    sim_flag = DeclareLaunchArgument(
-        'sim_flag',
-        default_value='true',
+    sim_time_flag = DeclareLaunchArgument(
+        'sim_time_flag',
+        default_value='false',
+    )
+    hardware_flag = DeclareLaunchArgument(
+        'hardware_flag',
+        default_value='false',
     )
 
     # visual
@@ -43,7 +47,7 @@ def generate_launch_description():
                 output='screen',
                 parameters=[{
                     'use_sim_time':
-                    LaunchConfiguration('sim_flag'),
+                    LaunchConfiguration('sim_time_flag'),
                     'robot_description':
                     xacro.process_file(urdf_file_path).toxml(),
                 }],
@@ -54,7 +58,8 @@ def generate_launch_description():
                 name='rviz',
                 output='screen',
                 parameters=[{
-                    'use_sim_time': LaunchConfiguration('sim_flag'),
+                    'use_sim_time':
+                    LaunchConfiguration('sim_time_flag'),
                 }],
                 arguments=['-d', rviz_file_path],
             ),
@@ -63,38 +68,31 @@ def generate_launch_description():
     )
 
     # sim
-    gazebo_launch_path = FindPackageShare('gazebo_ros').find(
-        'gazebo_ros') + '/launch/gazebo.launch.py'
-    gazebo_param = FindPackageShare('hex_toolkit_echo_plus').find(
-        'hex_toolkit_echo_plus') + '/config/ros2/gazebo.yaml'
+    odom_sim_param = FindPackageShare('hex_toolkit_echo_plus').find(
+        'hex_toolkit_echo_plus') + '/config/ros2/odom_sim.yaml'
     sim_group = GroupAction(
         [
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([gazebo_launch_path]),
-                launch_arguments={
-                    'params_file': gazebo_param,
-                }.items(),
-            ),
             Node(
-                package='gazebo_ros',
-                executable='spawn_entity.py',
-                arguments=[
-                    '-topic',
-                    'robot_description',
-                    '-entity',
-                    'echo_plus',
-                    '-x',
-                    '0.0',
-                    '-y',
-                    '0.0',
-                    '-z',
-                    '0.0',
-                    '-Y',
-                    '0.0',
+                package='hex_toolkit_general_chasssis',
+                executable='odom_sim',
+                name='odom_sim',
+                output='screen',
+                emulate_tty=True,
+                parameters=[
+                    {
+                        'use_sim_time': LaunchConfiguration('sim_time_flag'),
+                    },
+                    odom_sim_param,
+                ],
+                remappings=[
+                    # subscribe
+                    ('/cmd_vel', '/cmd_vel'),
+                    # publish
+                    ('/odom', '/odom'),
                 ],
             ),
         ],
-        condition=IfCondition(LaunchConfiguration('sim_flag')),
+        condition=UnlessCondition(LaunchConfiguration('hardware_flag')),
     )
 
     # real
@@ -118,13 +116,14 @@ def generate_launch_description():
                 ],
             ),
         ],
-        condition=UnlessCondition(LaunchConfiguration('sim_flag')),
+        condition=IfCondition(LaunchConfiguration('hardware_flag')),
     )
 
     return LaunchDescription([
         # arg
         visual_flag,
-        sim_flag,
+        sim_time_flag,
+        hardware_flag,
         # visual
         visual_group,
         # sim

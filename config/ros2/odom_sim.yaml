@@ -1,0 +1,18 @@
+odom_sim:
+  ros__parameters:
+    # rate
+    rate_ros: 100.0
+
+    # model
+    model_base: "base_link"
+    model_odom: "odom"
+
+    # limit
+    limit_vel:
+      # [vel_norm, omega]
+      - 0.5
+      - 1.57
+    limit_acc:
+      # [acc_norm, alpha]
+      - 6.0
+      - 3.14

@@ -45,7 +45,7 @@ class DataInterface(InterfaceBase):
         # obs
         self._obs_param.update({
             "weights":
-            np.array(rospy.get_param('~obs_weights', 1.0)),
+            np.array(rospy.get_param('~obs_weights', [1.0])),
         })
         # limit
         self._limit_param.update({

@@ -19,7 +19,11 @@ pid_trace:
       - 3.14
 
     # obs
-    obs_weights: 0.3
+    obs_weights: # weights of observation
+      - 0.3
+      - 0.3
+      - 0.3
+      - 0.3
 
     # trace
     trace_pid:

@@ -41,7 +41,7 @@ class DataInterface(InterfaceBase):
         self.__node.declare_parameter('model_odom', "unknown")
         self.__node.declare_parameter('limit_vel', [0.0])
         self.__node.declare_parameter('limit_acc', [0.0])
-        self.__node.declare_parameter('obs_weights', 0.5)
+        self.__node.declare_parameter('obs_weights', [0.5])
         self.__node.declare_parameter('trace_pid', ["[1.0, 1.0]"])
         self.__node.declare_parameter('trace_err_limit', [0.0])
         self.__node.declare_parameter('trace_switch_dist', 0.1)

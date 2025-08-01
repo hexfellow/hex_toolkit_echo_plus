@@ -14,11 +14,11 @@ import sys
 scrpit_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(scrpit_path)
 from utility import DataInterface
-from utility import ObsUtil
 from utility import PdCtrl
 from utility import DistYawCtrl
 
 import hex_utils
+from hex_utils import ObsUtilWork
 from hex_utils import HexCartVel, HexCartPose, HexCartState
 
 
@@ -36,10 +36,10 @@ class PidTrace:
         self.__trace_param = self.__data_interface.get_trace_param()
 
         ### utility
-        self.__obs_util = ObsUtil(
-            rate_param=self.__rate_param,
-            limit_param=self.__limit_param,
-            obs_param=self.__obs_param,
+        self.__obs_util = ObsUtilWork(
+            dt=1.0 / self.__rate_param['ros'],
+            vel_limit=self.__limit_param['vel'],
+            acc_limit=self.__limit_param['acc'],
         )
         self.__pd_ctrl = PdCtrl(trace_param=self.__trace_param)
         self.__dist_yaw_ctrl = DistYawCtrl(trace_param=self.__trace_param)
@@ -69,7 +69,11 @@ class PidTrace:
             yaw_ref = yaw_err
             pos_ref = np.zeros(2)
         else:
-            yaw_ref, pos_ref = self.__dist_yaw_ctrl(yaw_err, pos_err, lin_cur[0])
+            yaw_ref, pos_ref = self.__dist_yaw_ctrl(
+                yaw_err=yaw_err,
+                pos_err=pos_err,
+                v_cur=lin_cur[0],
+            )
         p_ref = np.array([pos_ref[0], yaw_ref])
 
         return p_ref, v_cur
@@ -84,7 +88,10 @@ class PidTrace:
                 if self.__cur_tar is None:
                     self.__cur_tar = sensor_odom.get_pose()
                 if self.__obs_util.is_ready():
-                    self.__obs_util.update(sensor_odom)
+                    self.__obs_util.update(
+                        sensor_odom,
+                        self.__obs_param['weights'],
+                    )
                 else:
                     self.__obs_util.set_state(sensor_odom)
 
@@ -110,8 +117,8 @@ class PidTrace:
 
                 # get control message
                 self.__obs_util.predict(
-                    acc=np.array([acc[0], 0.0, 0.0]),
-                    alpha=np.array([0.0, 0.0, acc[1]]),
+                    acc_lin=np.array([acc[0], 0.0, 0.0]),
+                    acc_ang=np.array([0.0, 0.0, acc[1]]),
                 )
                 cur_state = self.__obs_util.get_state()
                 self.__ctrl_msg = cur_state.vel()

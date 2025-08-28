@@ -3,7 +3,7 @@
 
 ## **Overview**
 
-The **hex_toolkit_echo_plus** package provides a suite of tools for **Echo Plus**, including URDF models and a simple pid (Model Predictive Control) demo.
+The **hex_toolkit_echo_plus** package provides a suite of tools for **Echo Plus**, including URDF models and a simple pid trajectory ßtracking demo.
 
 ### **Maintainer**
 

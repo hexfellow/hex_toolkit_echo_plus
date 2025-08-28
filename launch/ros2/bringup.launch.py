@@ -35,7 +35,7 @@ def generate_launch_description():
 
     # visual
     urdf_file_path = FindPackageShare('hex_toolkit_echo_plus').find(
-        'hex_toolkit_echo_plus') + '/urdf/echo_plus_ros2.xacro'
+        'hex_toolkit_echo_plus') + '/urdf/echo_plus.urdf'
     rviz_file_path = FindPackageShare('hex_toolkit_echo_plus').find(
         'hex_toolkit_echo_plus') + '/config/ros2/display.rviz'
     visual_group = GroupAction(

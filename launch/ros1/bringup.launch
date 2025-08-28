@@ -16,7 +16,7 @@
     <group if="$(arg visual_flag)">
         # description
         <param name="robot_description"
-               command="xacro $(find hex_toolkit_echo_plus)/urdf/echo_plus_ros1.xacro" />
+               command="xacro $(find hex_toolkit_echo_plus)/urdf/echo_plus.urdf" />
         # robot state publisher
         <node name="robot_state_publisher"
               pkg="robot_state_publisher"

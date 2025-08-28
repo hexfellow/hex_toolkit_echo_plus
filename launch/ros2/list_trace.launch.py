@@ -39,8 +39,6 @@ def generate_launch_description():
     # pid track
     urdf_file_path = FindPackageShare('hex_toolkit_echo_plus').find(
         'hex_toolkit_echo_plus') + '/urdf/echo_plus.urdf'
-    pid_root_path = FindPackageShare('hex_toolkit_echo_plus').find(
-        'hex_toolkit_echo_plus')
     pid_trace_yaml_path = FindPackageShare('hex_toolkit_echo_plus').find(
         'hex_toolkit_echo_plus') + '/config/ros2/pid_trace.yaml'
     pid_trace_node = Node(
@@ -53,7 +51,6 @@ def generate_launch_description():
             {
                 'use_sim_time': LaunchConfiguration('sim_time_flag'),
                 'model_path': urdf_file_path,
-                'pid_root': pid_root_path,
             },
             pid_trace_yaml_path,
         ],
